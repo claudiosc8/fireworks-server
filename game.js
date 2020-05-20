@@ -16,15 +16,17 @@ const StartNewGame = (room, players) => {
 
     const game = {
       started: true,
-      players: players,
-      cards: setupGame(players),
+      players: players.map((e,i) => {return {name:e.name, order:i} }),
+      currentTurn: Math.floor(Math.random() * players.length),
+      cards: setupGame(players.length),
       room: room,
       noteTokens: 8,
       stormTokens: 3,
-      discardPile: [],
+      game_id:generateGameId(),
     }
 
     games.push(game);
+
     return game;
 
 }
@@ -33,33 +35,33 @@ const newGame = (room) => {
 
 }
 
-
 const getGame = (room) => puzzles.find((singleGame) => singleGame.room === room.trim().toLowerCase() )
 
 const removeGame = (room) => {
-
+  const index = games.findIndex((game) => game.room === room.trim().toLowerCase());
+  if(index !== -1) return game.splice(index, 1)[0];
 }
 
 const getAllGames = () => puzzles
 
 const setupGame = (number) => {
 
-    const cards = generateDeck();
+    const deck = generateDeck();
 
-    const players = []
+    const hands = []
 
     for(let i = 0; i < number; i++) {
-      const hand = cards.splice(0, 4);
-      players.push(hand)
+      const player = deck.splice(0, 4);
+      hands.push(player)
     }
 
-    return {cards, players}
+    return {deck, hands, descardPile: [], table: []}
 }
 
 const generateDeck = () => {
 
     const colors = ['red', 'yellow', 'green', 'blue', 'white']
-    const values = [Array(3).fill(1), Array(2).fill(2), Array(2).fill(3), Array(2).fill(4),[5]].flat()
+    const values = [1,1,1,2,2,3,3,4,4,5]
 
     const cards = colors.map(color => {
 
@@ -67,10 +69,14 @@ const generateDeck = () => {
         return {value, color}
       })
 
-    }).flat().sort(() => Math.random() - 0.5)
+    })
+
+    const merger = [].concat.apply([], cards).sort(() => Math.random() - 0.5);
 
     return cards
 
 }
+
+const generateGameId = () =>  '_' + Math.random().toString(36).substr(2, 9);
 
 module.exports = { checkGame, StartNewGame, newGame, getGame, getAllGames, removeGame };

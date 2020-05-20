@@ -38,25 +38,21 @@ io.on('connection', (socket) => {
 
   socket.on('startGame', (prop) => {
     const user = getUser(socket.id);
-    const game = StartNewGame(user.room)
+    const UsersInRoom = getUsersInRoom(user.room);
+    const game = StartNewGame(user.room, UsersInRoom)
     io.to(user.room).emit('GameUpdate', game )
   })
 
-
   socket.on('disconnect', () => {
 
-    const user = removeUser(socket.id);
+      const user = removeUser(socket.id);
 
-    if(user) {
-    	const UsersInRoom = getUsersInRoom(user.room);
-
-    	// if(UsersInRoom.length === 0) {
-    	// 	removePuzzle(user.room)
-    	// }
-    	io.to(user.room).emit('onlineUsers', {room: user.room, users: UsersInRoom})
-
-    }
+      if(user) {
+      	const UsersInRoom = getUsersInRoom(user.room);
+      	if(UsersInRoom.length === 0) { removeGame(user.room) }
+      	io.to(user.room).emit('onlineUsers', {room: user.room, users: UsersInRoom})
+      }
+    });
   });
-});
 
 server.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
