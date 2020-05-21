@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 require('dotenv/config')
 
 const { addUser, removeUser, getUser, getUsersInRoom, getAllUsers } = require('./users')
-const { checkGame, StartNewGame, newGame, getGame, getAllGames, removeGame } = require('./game')
+const { checkGame, StartNewGame, newGame, getGame, getAllGames, removeGame, playTurn } = require('./game')
 
 const PORT = process.env.PORT || 5000;
 
@@ -26,20 +26,33 @@ io.on('connection', (socket) => {
   socket.on('join', async ({name, room}, callback) => {
 
   	const { error, user } = addUser({id:socket.id, name, room});
-  
   	if(error) return callback({error})
 
-  	socket.join(user.room);
+    socket.join(user.room);
 
-  	io.to(user.room).emit('onlineUsers', {room: user.room, users: getUsersInRoom(user.room)})
+    io.to(user.room).emit('onlineUsers', {room: user.room, users: getUsersInRoom(user.room)})
 
-  	callback({name:user.name});
+    const response = {name:user.name}
+
+    const game = checkGame(room)
+    
+    if (game.error) {
+      response.error = game.error
+    }
+
+  	callback(response);
   })
 
-  socket.on('startGame', (prop) => {
+  socket.on('startGame', (prop, callback) => {
     const user = getUser(socket.id);
     const UsersInRoom = getUsersInRoom(user.room);
     const game = StartNewGame(user.room, UsersInRoom)
+    io.to(user.room).emit('GameUpdate', game )
+  })
+
+  socket.on('playTurn', ({type, action}) => {
+    const user = getUser(socket.id);
+    const game = playTurn(user.room, type, action)
     io.to(user.room).emit('GameUpdate', game )
   })
 
