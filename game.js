@@ -152,10 +152,12 @@ const drawCard = (game) => {
         const newCard = game.cards.deck.shift();
         const currentHand = game.cards.hands[game.currentTurn]
         currentHand.unshift(newCard)
+        game.drawnCard = newCard
 
         if(game.cards.deck.length === 0) {
           game.remainingTurns = game.players.length
         }
+
 
 }
 
@@ -191,7 +193,7 @@ const generateDeck = () => {
     const colors = ['red', 'yellow', 'green', 'blue', 'white']
     const values = [1,1,1,2,2,3,3,4,4,5]
 
-    const cards = colors.map(color =>  values.map(value => ({value, color}) ) )
+    const cards = colors.map(color =>  values.map(value => ({value, color, id:generateGameId()}) ) )
 
     const merger = [].concat.apply([], cards).sort(() => Math.random() - 0.5);
 

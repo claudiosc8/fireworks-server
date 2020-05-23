@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 require('dotenv/config')
 
 const { addUser, removeUser, getUser, getUsersInRoom, getAllUsers } = require('./users')
-const { checkGame, StartNewGame, newGame, getGame, getAllGames, removeGame, playTurn } = require('./game')
+const { checkGame, StartNewGame, newGame, getGame, getAllGames, removeGame, playTurn, drawCard } = require('./game')
 
 const PORT = process.env.PORT || 5000;
 
@@ -55,6 +55,7 @@ io.on('connection', (socket) => {
     const game = playTurn(user.room, type, action)
     io.to(user.room).emit('GameUpdate', game )
   })
+
 
   socket.on('disconnect', () => {
 
