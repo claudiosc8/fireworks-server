@@ -91,7 +91,7 @@ const handleDiscard = (game, index) => {
 
       const currentHand = game.cards.hands[game.currentTurn]
       const selected = currentHand.splice(index,1)[0] 
-      game.cards.discardPile = [selected, ...game.cards.discardPile]
+      game.cards.discardPile = [...game.cards.discardPile, selected]
       if(game.tokens < 8) {
         game.noteTokens ++
       }
@@ -128,8 +128,10 @@ const handleHint = (game, hint) => {
 
         playerCards.forEach(card => {
 
-            if(card[hint.type] === hint.value) {
-              card.hint = {[hint.type] : true};
+            if(card.color === hint.value) {
+              card.hintColor = true;
+            } else if(card.value === hint.value) {
+              card.hintValue = true;
             }
           
         })
