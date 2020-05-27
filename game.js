@@ -165,7 +165,7 @@ const handleGameOver = (game) => {
       game.score = getScore(game.cards.table);
       game.result = getResult(game.score)
 
-      const message = game.stormTokens === 0 ? `The third storm token has been used. The game is over` : `The game is over. Your score is ${game.score}. ${game.result}`
+      const message = game.stormTokens === 0 ? `The third storm token has been played. The game is over` : `The game is over. Your score is ${game.score}. ${game.result}`
       game.log.push(newMessage(message))
 }
 
