@@ -120,7 +120,7 @@ const handlePlay = (game, index) => {
         game.cards.table[selected.color] ++
         message = `<strong>${game.players[game.currentTurn].name}</strong> played <strong>${selected.value} ${selected.color}</strong> correctly`
       } else {
-        game.cards.discardPile = [selected, ...game.cards.discardPile];
+        game.cards.discardPile = [...game.cards.discardPile, selected];
         game.stormTokens --
         message = `<strong>${game.players[game.currentTurn].name}</strong> played <strong>${selected.value} ${selected.color}</strong> but it wasn't correct!`
       }
