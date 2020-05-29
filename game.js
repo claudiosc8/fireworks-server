@@ -19,6 +19,12 @@ const checkGame = (room) => {
 
 const StartNewGame = (room, players) => {
 
+    const checkgame = getGame(room)
+    
+    if(checkgame) {
+      removeGame(room)
+    }
+
     room = trim(room);
 
     const game = {
@@ -39,8 +45,9 @@ const StartNewGame = (room, players) => {
 
 }
 
-const newGame = (room) => {
-
+const newGame = (room, players) => {
+  removeGame(room)
+  return StartNewGame(room, players)
 }
 
 const getGame = (room) => games.find((singleGame) => singleGame.room === room.trim().toLowerCase() )
