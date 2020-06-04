@@ -5,14 +5,18 @@ let games = [];
 const players = [{name:'josh'},{name:'maria'}]
 const room = 'kitchen'
 
-const checkGame = (room) => {
+const checkGame = (room, name) => {
   
   const game = getGame(room)
 
   if(game) {
-    return {error: 'Game already exists in this room'}
+    if(game.players.some(e => e.name === name)){
+      return {game};
+    } else {
+      return {gameError: 'Game already exists in this room'}
+    }
   } else {
-    return true;
+    return {newGame:true};
   }
 
 }

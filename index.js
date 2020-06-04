@@ -34,10 +34,12 @@ io.on('connection', (socket) => {
 
     const response = {name:user.name}
 
-    const game = checkGame(room)
+    const {gameError, game, newGame} = checkGame(room, user.name)
     
-    if (game.error) {
-      response.error = game.error
+    if (gameError) {
+      response.error = gameError;
+    } else if (game){
+      response.game = game;
     }
 
   	callback(response);
