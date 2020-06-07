@@ -62,7 +62,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
 
       const user = removeUser(socket.id);
-
       if(user) {
       	const UsersInRoom = getUsersInRoom(user.room);
       	if(UsersInRoom.length === 0) { removeGame(user.room) }
