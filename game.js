@@ -108,7 +108,7 @@ const handleDiscard = (game, index) => {
       selected.hintColor = undefined;
       selected.hintValue = undefined;
       game.cards.discardPile = [...game.cards.discardPile, selected]
-      if(game.tokens < 8) {
+      if(game.noteTokens < 8) {
         game.noteTokens ++
       }
       
