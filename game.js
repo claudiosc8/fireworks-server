@@ -115,7 +115,9 @@ const handleDiscard = (game, index) => {
       const message = `<strong>${game.players[game.currentTurn].name}</strong> discarded <strong>${selected.value} ${selected.color}</strong>`
       game.log.push(newMessage(message))
 
-      drawCard(game)
+      if(game.cards.deck.length > 0) {
+        drawCard(game)
+      }
 
 }
 
